@@ -1,0 +1,11 @@
+[package]
+name = "next-word-predictor"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "predictor"
+crate_type = [ "cdylib" ]
+
+[dependencies]
+jni = "0.21.1"
