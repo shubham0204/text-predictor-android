@@ -20,7 +20,7 @@ jobs:
         run: chmod +x gradlew
 
 
-      - name: Build with Gradle
+      - name: Build project and generate docs with Dokka
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build dokkaHtml
@@ -28,9 +28,9 @@ jobs:
 
       - name: Move docs to gh-pages
         run: |
-          mkdir gh-pages
-          mv README.md gh-pages/README.md
-          mv build/dokka/html gh-pages/
+          mkdir -p gh-pages/android
+          mv README.md gh-pages/android/README.md
+          mv build/docs/* gh-pages/android/
 
 
       - name: Publish docs
