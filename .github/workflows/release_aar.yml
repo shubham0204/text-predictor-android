@@ -1,0 +1,75 @@
+name: Build and Release Android AAR
+on: [ 'workflow_dispatch']
+jobs:
+  release_aar:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout GitHub repo
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+
+      - name: Build AAR
+        run: bash ./gradlew text-predictor:assembleRelease --stacktrace
+
+
+      - name: Delete older releases
+        uses: dev-drprasad/delete-older-releases@v0.2.1
+        with:
+          repo: shubham0204/text-predictor-android
+          keep_latest: 1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Bump version for release
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Create a release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: text-predictor - ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+
+      - name: Upload APK to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: text-predictor/build/outputs/aar/text-predictor-release.aar
+          asset_name: text-predictor.aar
+          asset_content_type: application/android-archive
+
+
+      - name: Upload APK to artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: text-predictor-release
+          path: text-predictor/build/outputs/aar/text-predictor-release.aar

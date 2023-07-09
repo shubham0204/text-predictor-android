@@ -1,0 +1,4 @@
+- `.github/workflows`: Added workflows for releasing AAR and publishing documentation
+- Created `InputValidators` to validate inputs to `NextWordPredictor` and `WordAutoCompletion`
+- Created `NextWordPredictor` and `WordAutoCompletion`
+- Created `TextPredictorError`
