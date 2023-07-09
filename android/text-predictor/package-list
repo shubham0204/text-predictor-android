@@ -1,0 +1,24 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.shubham0204.text_predictor////PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/index.html
+$dokka.location:com.shubham0204.text_predictor/InputValidators.Companion///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-input-validators/-companion/index.html
+$dokka.location:com.shubham0204.text_predictor/InputValidators.Companion/checkIfContainsNumber/#kotlin.String/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-input-validators/-companion/check-if-contains-number.html
+$dokka.location:com.shubham0204.text_predictor/InputValidators.Companion/checkIfWord/#kotlin.String/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-input-validators/-companion/check-if-word.html
+$dokka.location:com.shubham0204.text_predictor/InputValidators///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-input-validators/index.html
+$dokka.location:com.shubham0204.text_predictor/InputValidators/InputValidators/#/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-input-validators/-input-validators.html
+$dokka.location:com.shubham0204.text_predictor/NextWordPredictor.Companion///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-next-word-predictor/-companion/index.html
+$dokka.location:com.shubham0204.text_predictor/NextWordPredictor///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-next-word-predictor/index.html
+$dokka.location:com.shubham0204.text_predictor/NextWordPredictor/NextWordPredictor/#android.content.Context/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-next-word-predictor/-next-word-predictor.html
+$dokka.location:com.shubham0204.text_predictor/NextWordPredictor/close/#/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-next-word-predictor/close.html
+$dokka.location:com.shubham0204.text_predictor/NextWordPredictor/predict/#kotlin.String#kotlin.Function1[kotlin.collections.List[kotlin.String],kotlin.Unit]#kotlin.Function1[com.shubham0204.text_predictor.TextPredictorError,kotlin.Unit]/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-next-word-predictor/predict.html
+$dokka.location:com.shubham0204.text_predictor/TextPredictorError.ERROR_CONTAINS_NUMBER///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-text-predictor-error/-e-r-r-o-r_-c-o-n-t-a-i-n-s_-n-u-m-b-e-r/index.html
+$dokka.location:com.shubham0204.text_predictor/TextPredictorError.ERROR_NO_WORD///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-text-predictor-error/-e-r-r-o-r_-n-o_-w-o-r-d/index.html
+$dokka.location:com.shubham0204.text_predictor/TextPredictorError///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-text-predictor-error/index.html
+$dokka.location:com.shubham0204.text_predictor/TextPredictorError/message/#/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-text-predictor-error/message.html
+$dokka.location:com.shubham0204.text_predictor/WordAutoCompletion.Companion///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-word-auto-completion/-companion/index.html
+$dokka.location:com.shubham0204.text_predictor/WordAutoCompletion///PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-word-auto-completion/index.html
+$dokka.location:com.shubham0204.text_predictor/WordAutoCompletion/WordAutoCompletion/#android.content.Context/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-word-auto-completion/-word-auto-completion.html
+$dokka.location:com.shubham0204.text_predictor/WordAutoCompletion/close/#/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-word-auto-completion/close.html
+$dokka.location:com.shubham0204.text_predictor/WordAutoCompletion/predict/#kotlin.String#kotlin.Function1[kotlin.collections.List[kotlin.String],kotlin.Unit]#kotlin.Function1[com.shubham0204.text_predictor.TextPredictorError,kotlin.Unit]/PointingToDeclaration/text-predictor/com.shubham0204.text_predictor/-word-auto-completion/predict.html
+com.shubham0204.text_predictor
+

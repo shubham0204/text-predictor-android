@@ -1,0 +1,1 @@
+sourceset_dependencies='{":text-predictor:dokkaHtml/androidTestRelease":[],":text-predictor:dokkaHtml/debug":[],":text-predictor:dokkaHtml/main":[],":text-predictor:dokkaHtml/release":[],":text-predictor:dokkaHtml/testFixtures":[],":text-predictor:dokkaHtml/testFixturesDebug":[],":text-predictor:dokkaHtml/testFixturesRelease":[]}'
