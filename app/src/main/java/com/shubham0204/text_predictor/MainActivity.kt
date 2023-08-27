@@ -1,13 +1,14 @@
 package com.shubham0204.text_predictor
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,38 +22,41 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.widget.addTextChangedListener
 import com.shubham0204.text_predictor.ui.theme.TextpredictorandroidTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var wordAutoCompletion : WordAutoCompletion
-    private lateinit var nextWordPredictor : NextWordPredictor
+    private lateinit var textPredictor: TextPredictor
     private val suggestionsListState = mutableStateOf<List<String>>( ArrayList() )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        wordAutoCompletion = WordAutoCompletion( this )
-        nextWordPredictor = NextWordPredictor( this )
+        textPredictor = TextPredictor( this , resultCallback )
 
         setContent {
             TextpredictorandroidTheme {
                 ActivityUI()
             }
         }
+    }
+
+    private val resultCallback : ((List<String>) -> Unit) = {
+        suggestionsListState.value = it
     }
 
     @Preview
@@ -73,13 +77,13 @@ class MainActivity : ComponentActivity() {
                 TextInput(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding( vertical=24.dp , horizontal=24.dp ),
+                        .padding(vertical = 24.dp, horizontal = 24.dp),
                     label = "Enter text here..." ,
                     onValueChange = textChangeListener )
                 Suggestions(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding( horizontal=24.dp ) )
+                        .padding(horizontal = 24.dp) )
             }
         }
     }
@@ -117,64 +121,36 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Suggestions( modifier: Modifier ) {
-        val list by remember{ suggestionsListState }
+        val list by suggestionsListState
         SuggestionsList( modifier, list )
     }
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SuggestionsList(
         modifier: Modifier ,
         predictions: List<String>
     ) {
-        LazyRow( modifier ){
+        LazyRow( modifier , contentPadding = PaddingValues( 16.dp ) ){
             items( predictions ) {
-                Surface( modifier = Modifier.background(Color.White , shape= RoundedCornerShape(16.dp)) ,
-                    onClick = {
-                        // TODO: Apply suggestion here
-                    }
-                ) {
+                Box {
                     Text(
-                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+                        modifier = Modifier.background( Color.Blue , RoundedCornerShape(8.dp) ) ,
                         text = it ,
-                        color = Color.Black,
+                        color = Color.White,
                     )
                 }
-
             }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        nextWordPredictor.close()
-        wordAutoCompletion.close()
     }
 
 
     private val textChangeListener : ((String) -> Unit) = { it ->
-        if(it.isNotBlank()) {
-            if( it.last() != ' ' ) {
-                val token = if ( it.contains( " " ) ) {
-                    it.split( " " ).last() }
-                else { it }
-                wordAutoCompletion.predict( token.lowercase() ) {
-                    suggestionsListState.value = it
-                }
-            }
-            else {
-                val parts = it.split( " " )
-                val token = parts[ parts.size - 2 ]
-                nextWordPredictor.predict( token.lowercase() ) { it ->
-                    suggestionsListState.value = it
-                }
-            }
-        }
-        else {
-            suggestionsListState.value = ArrayList()
-        }
-
+        textPredictor.stream( it )
     }
 
 

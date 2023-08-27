@@ -1,32 +1,28 @@
 package com.shubham0204.text_predictor
 
-import java.util.regex.Pattern
-
 /**
  Validates input using regular expressions
  It is used to report errors in the input provided to [WordAutoCompletion.predict] or [NextWordPredictor.predict].
 **/
-class InputValidators {
+internal class InputValidators {
 
     companion object {
 
-        private val checkWordRegex = Pattern.compile( "(?:[A-Za-z]+|\\d+)\\s+(?:[A-Za-z]+|\\d+)" )
-        private val checkIfNumber = Pattern.compile( "" )
+        private val wordRegex = "(?:[A-Za-z]+|\\d+)\\s+(?:[A-Za-z]+|\\d+)".toRegex()
+        private val nonAlphabetRegex = "[^a-zA-Z ]+".toRegex()
 
         /**
-         *
+         * Checks if the given [input] contains only a single word. This check is necessary,
+         * as both [NextWordPredictor] and [WordAutoCompletion] operate only on words.
          * @param input The input string which has to be validated
          * @return Whether [input] contains only a single word
          */
         fun checkIfWord( input: String ) : Boolean {
-            return !checkWordRegex.matcher( input.trim() ).find()
+            return !wordRegex.containsMatchIn( input.trim() )
         }
 
-        /**
-         * @param
-         */
-        fun checkIfContainsNumber( input: String ) : Boolean {
-            return !checkIfNumber.matcher( input.trim() ).find()
+        fun stripNonAlphabet( input : String ) : String {
+            return input.replace( nonAlphabetRegex , "" ) .trim()
         }
 
     }

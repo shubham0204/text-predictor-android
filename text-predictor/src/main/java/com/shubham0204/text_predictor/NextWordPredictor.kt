@@ -20,27 +20,9 @@ For more implementation details, see the `rust` branch.
 The implementation of the graph is built in Rust, and is interfaced with this class through JNI.
 The .so libraries for various targets could be found in `text-predictor/src/main/jniLibs`. The JNI
 methods would be found on the `rust` branch in `src/lib.rs` script.
-
-Example:
-
 ```
-val nextWordPredictor = NextWordPredictor( context )
-nextWordPredictor.load()
-
-val input = "why"
-nextWordPredictor.predict(
-    input ,
-    onResult = { results ->
-
-    } ,
-    onError = { error ->
-        println( error.message
-    }
-)
-```
-
  **/
-class NextWordPredictor( private val context : Context ) {
+internal class NextWordPredictor( private val context : Context ) {
 
     // A pointer to an instance of `predictor` which is used in the Rust
     // code to call methods and allocate objects at run-time
@@ -68,27 +50,26 @@ class NextWordPredictor( private val context : Context ) {
      * `[ are , you , should ]` as a `List<String>` in the `onResult` callback.
      * @param word The current word entered by the user, using which following words will be suggested.
      * @param onResult The callback which delivers a `List<String>` containing the predicted words.
-     * @param onError Provides a [TextPredictorError] when the operation fails
      */
     fun predict( word: String ,
-                 onResult: ((List<String>) -> Unit) ,
-                 onError: ((TextPredictorError) -> Unit)
+                 onResult: ((List<String>) -> Unit)
     ) = runBlocking( Dispatchers.Default ) {
-        val input = word.lowercase().trim()
-        if( !InputValidators.checkIfWord( input ) ) {
-            if( !InputValidators.checkIfContainsNumber( input ) ) {
+        var input = word.lowercase().trim()
+        if( InputValidators.checkIfWord( input ) ) {
+            input = InputValidators.stripNonAlphabet( input )
+            if( input.isNotEmpty() ) {
                 val output = predictToken(instancePtr, word.lowercase() )
-                onResult( output.split("\n")
+                onResult( output.split(" ")
                     .map { it.trim() }
                     .filter { it.isNotEmpty() }
                     .toList() )
             }
             else {
-                onError( TextPredictorError.ERROR_CONTAINS_NUMBER )
+                onResult( listOf() )
             }
         }
         else {
-            onError( TextPredictorError.ERROR_NO_WORD )
+            onResult( listOf() )
         }
     }
 
@@ -100,11 +81,14 @@ class NextWordPredictor( private val context : Context ) {
         deleteNativeInstance( instancePtr )
     }
 
+    // Copies assets to app's storage, and creates a native object,
+    // assigning its address to `instancePtr`
     private fun load() = runBlocking( Dispatchers.IO ) {
         val appDirCorpusPath = copyFromAssetsToAppDir( assetName , assetName )
         instancePtr = createNativeInstance( appDirCorpusPath )
     }
 
+    // Copies a file from the library's assetFolder to the app's internal storage (private storage)
     private fun copyFromAssetsToAppDir( assetsFilename: String , appDirFilename: String ) : String {
         val inputStream = context.assets.open( assetsFilename )
         val bufferSize = inputStream.available()
@@ -120,6 +104,10 @@ class NextWordPredictor( private val context : Context ) {
         return file.absolutePath
     }
 
+    // JNI methods whose implementation is stored in the .so files
+    // Note: These methods should not be modified, nor the package name of this
+    //       class should change. JVM would not be able to find the implementation
+    //       for these methods, if their signature is changed.
      private external fun createNativeInstance(filepath : String ): Long
      private external fun deleteNativeInstance(instancePtr : Long )
      private external fun predictToken(instancePtr: Long, token : String ) : String
