@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p gh-pages/android
           mv README.md gh-pages/android/README.md
-          mv build/docs/* gh-pages/android/
+          mv text-predictor/build/dokka/html/* gh-pages/android/
 
 
       - name: Publish docs
