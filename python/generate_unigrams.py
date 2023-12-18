@@ -27,9 +27,9 @@ def get_tokens( text ):
     seqs = [ seq for seq in seqs if len( seq ) > 2 ]
     return seqs
 
-output_file = open( "generated/unigrams.txt" , "w" )
+output_file = open( "../generated/unigrams.txt" , "w" )
 
-ds = pd.read_csv( "dataset/conversations.csv" )
+ds = pd.read_csv( "../dataset/conversations.csv" )
 questions = list( ds[ "question" ] )
 answers = list( ds[ "answer" ] )
 ds = [ " ".join( [questions[i] , answers[i]] ) for i in range( len( questions ) ) ]

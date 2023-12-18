@@ -3,9 +3,9 @@ def get_top_k_words( words , freqs , k = 3 ):
     p = sorted( t , key=lambda x : t[x] , reverse=True )
     return p[ 0 : k ]
 
-output_file = open( "generated/corpus.txt" , "w" )
+output_file = open( "../generated/corpus.txt" , "w" )
 
-with open( "generated/graph.txt" , "r" ) as file:
+with open( "../generated/graph.txt" , "r" ) as file:
     for line in file:
         parts = line.split() 
         if len( parts ) > 2:
